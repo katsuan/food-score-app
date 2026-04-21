@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>料理画像スコア診断</title>
+  <link rel="icon" href="./favicon.ico">
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <header class="header">
+        <p class="eyebrow">FOOD SCORE</p>
+        <h1>料理画像を採点</h1>
+        <p class="description">
+          料理写真をアップロードすると、AI風のコメント付きで点数を返します。
+          投稿画像は宣伝・広告素材として利用される場合があります。
+        </p>
+      </header>
+
+      <form id="uploadForm" class="form">
+        <div class="field">
+          <label for="menuName">メニュー名</label>
+          <input
+            type="text"
+            id="menuName"
+            name="menuName"
+            placeholder="例: スタミナ焼き"
+            maxlength="50"
+          />
+        </div>
+
+        <div class="field">
+          <label for="comment">ひとこと</label>
+          <textarea
+            id="comment"
+            name="comment"
+            rows="2"
+            placeholder="例: こってり感が伝わる一枚です"
+            maxlength="100"
+          ></textarea>
+        </div>
+
+        <div class="field">
+          <label for="imageInput">料理画像</label>
+          <input
+            type="file"
+            id="imageInput"
+            name="image"
+            accept="image/*"
+            required
+          />
+        </div>
+
+        <div class="preview-wrapper" id="previewWrapper" hidden>
+          <p class="preview-label">プレビュー</p>
+          <img id="previewImage" class="preview-image" alt="画像プレビュー" />
+        </div>
+
+        <button type="submit" id="submitButton" class="submit-button">
+          採点する
+        </button>
+      </form>
+
+      <section id="resultSection" class="result" hidden>
+        <p class="result-label">診断結果</p>
+        <div class="score-row">
+          <span class="score-value" id="scoreValue">0</span>
+          <span class="score-unit">点</span>
+        </div>
+        <p class="score-rank" id="scoreRank"></p>
+        <p class="score-comment" id="scoreComment"></p>
+      </section>
+
+      <section id="errorSection" class="error" hidden>
+        <p id="errorMessage"></p>
+      </section>
+    </section>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
