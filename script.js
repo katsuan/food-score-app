@@ -9,6 +9,8 @@ const submitButton = document.getElementById("submitButton");
 const loadingModal = document.getElementById("loadingModal");
 const resultModal = document.getElementById("resultModal");
 const closeModalButton = document.getElementById("closeModalButton");
+const resultImageFrame = document.getElementById("resultImageFrame");
+const resultPreviewImage = document.getElementById("resultPreviewImage");
 const scoreValue = document.getElementById("scoreValue");
 const scoreRank = document.getElementById("scoreRank");
 const scoreComment = document.getElementById("scoreComment");
@@ -37,12 +39,15 @@ imageInput.addEventListener("change", () => {
   if (!file) {
     previewWrapper.hidden = true;
     previewImage.removeAttribute("src");
+    clearResultPreviewImage();
     return;
   }
 
   const reader = new FileReader();
   reader.onload = () => {
-    previewImage.src = reader.result;
+    const imageUrl = String(reader.result);
+    previewImage.src = imageUrl;
+    setResultPreviewImage(imageUrl);
     previewWrapper.hidden = false;
   };
   reader.readAsDataURL(file);
@@ -129,6 +134,11 @@ function showResult(data) {
   scoreValue.textContent = data.score ?? 0;
   scoreRank.textContent = data.rank ?? "";
   scoreComment.textContent = data.comment ?? "";
+
+  if (previewImage.getAttribute("src")) {
+    setResultPreviewImage(previewImage.src);
+  }
+
   openModal(resultModal);
   closeModalButton.focus();
 }
@@ -179,4 +189,14 @@ function closeModal(modalElement) {
 
 function updateBodyScrollState() {
   document.body.classList.toggle("modal-open", activeModalCount > 0);
+}
+
+function setResultPreviewImage(imageUrl) {
+  resultPreviewImage.src = imageUrl;
+  resultImageFrame.hidden = false;
+}
+
+function clearResultPreviewImage() {
+  resultPreviewImage.removeAttribute("src");
+  resultImageFrame.hidden = true;
 }
