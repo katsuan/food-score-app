@@ -31,6 +31,10 @@ body {
   color: var(--text);
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 .container {
   min-height: 100vh;
   display: grid;
@@ -140,24 +144,20 @@ body {
   transform: translateY(-1px);
 }
 
+.submit-button.is-loading {
+  position: relative;
+  color: rgba(255, 255, 255, 0.88);
+}
+
 .submit-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.result,
 .error {
   margin-top: 24px;
   border-radius: 16px;
   padding: 20px;
-}
-
-.result {
-  background: var(--success-bg);
-  border: 1px solid var(--success-border);
-}
-
-.error {
   background: var(--error-bg);
   border: 1px solid var(--error-border);
 }
@@ -199,8 +199,107 @@ body {
   color: #f1f1f1;
 }
 
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.modal[hidden] {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.modal-card {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 520px);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+}
+
+.modal-title {
+  margin: 0 0 12px;
+  font-size: clamp(24px, 4vw, 30px);
+  line-height: 1.2;
+}
+
+.loading-card,
+.result-card {
+  padding: 28px;
+}
+
+.loading-card {
+  text-align: center;
+  background:
+    radial-gradient(circle at top, rgba(255, 122, 0, 0.18), transparent 48%),
+    #171717;
+}
+
+.loading-text {
+  margin: 0;
+  color: var(--subtext);
+  line-height: 1.7;
+}
+
+.loading-spinner {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  border: 6px solid rgba(255, 255, 255, 0.12);
+  border-top-color: var(--accent);
+  border-right-color: var(--accent-strong);
+  animation: spin 0.85s linear infinite;
+}
+
+.result-card {
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (max-width: 640px) {
   .card {
     padding: 18px;
+  }
+
+  .modal {
+    padding: 16px;
+  }
+
+  .loading-card,
+  .result-card {
+    padding: 22px;
   }
 }

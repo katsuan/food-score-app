@@ -63,21 +63,58 @@
         </button>
       </form>
 
-      <section id="resultSection" class="result" hidden>
-        <p class="result-label">診断結果</p>
-        <div class="score-row">
-          <span class="score-value" id="scoreValue">0</span>
-          <span class="score-unit">点</span>
-        </div>
-        <p class="score-rank" id="scoreRank"></p>
-        <p class="score-comment" id="scoreComment"></p>
-      </section>
-
       <section id="errorSection" class="error" hidden>
         <p id="errorMessage"></p>
       </section>
     </section>
   </main>
+
+  <div
+    id="loadingModal"
+    class="modal loading-modal"
+    hidden
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="loadingTitle"
+  >
+    <div class="modal-backdrop"></div>
+    <section class="modal-card loading-card">
+      <div class="loading-spinner" aria-hidden="true"></div>
+      <h2 id="loadingTitle" class="modal-title">採点中です</h2>
+      <p class="loading-text">画像を解析しています。しばらくお待ちください。</p>
+    </section>
+  </div>
+
+  <div
+    id="resultModal"
+    class="modal"
+    hidden
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="resultTitle"
+  >
+    <div class="modal-backdrop" data-close-modal="true"></div>
+    <section class="modal-card result-card">
+      <button
+        type="button"
+        id="closeModalButton"
+        class="modal-close"
+        aria-label="結果を閉じる"
+      >
+        ×
+      </button>
+      <p class="result-label">診断結果</p>
+      <h2 id="resultTitle" class="modal-title">採点結果</h2>
+      <div class="score-row">
+        <span class="score-value" id="scoreValue">0</span>
+        <span class="score-unit">点</span>
+      </div>
+      <p class="score-rank" id="scoreRank"></p>
+      <p class="score-comment" id="scoreComment"></p>
+    </section>
+  </div>
 
   <script src="./script.js"></script>
 </body>

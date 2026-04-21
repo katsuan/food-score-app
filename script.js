@@ -6,13 +6,31 @@ const previewWrapper = document.getElementById("previewWrapper");
 const previewImage = document.getElementById("previewImage");
 const submitButton = document.getElementById("submitButton");
 
-const resultSection = document.getElementById("resultSection");
+const loadingModal = document.getElementById("loadingModal");
+const resultModal = document.getElementById("resultModal");
+const closeModalButton = document.getElementById("closeModalButton");
 const scoreValue = document.getElementById("scoreValue");
 const scoreRank = document.getElementById("scoreRank");
 const scoreComment = document.getElementById("scoreComment");
 
 const errorSection = document.getElementById("errorSection");
 const errorMessage = document.getElementById("errorMessage");
+let activeModalCount = 0;
+
+closeModalButton.addEventListener("click", hideResultModal);
+
+resultModal.addEventListener("click", (event) => {
+  const target = event.target;
+  if (target instanceof HTMLElement && target.dataset.closeModal === "true") {
+    hideResultModal();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !resultModal.hidden) {
+    hideResultModal();
+  }
+});
 
 imageInput.addEventListener("change", () => {
   const file = imageInput.files?.[0];
@@ -46,6 +64,8 @@ uploadForm.addEventListener("submit", async (event) => {
   try {
     submitButton.disabled = true;
     submitButton.textContent = "採点中...";
+    submitButton.classList.add("is-loading");
+    showLoadingModal();
 
     const base64Image = await fileToBase64(imageFile);
 
@@ -83,8 +103,10 @@ uploadForm.addEventListener("submit", async (event) => {
     console.error(error);
     showError(error.message || "エラーが発生しました。");
   } finally {
+    hideLoadingModal();
     submitButton.disabled = false;
     submitButton.textContent = "採点する";
+    submitButton.classList.remove("is-loading");
   }
 });
 
@@ -107,7 +129,8 @@ function showResult(data) {
   scoreValue.textContent = data.score ?? 0;
   scoreRank.textContent = data.rank ?? "";
   scoreComment.textContent = data.comment ?? "";
-  resultSection.hidden = false;
+  openModal(resultModal);
+  closeModalButton.focus();
 }
 
 function showError(message) {
@@ -116,6 +139,44 @@ function showError(message) {
 }
 
 function hideMessages() {
-  resultSection.hidden = true;
   errorSection.hidden = true;
+  hideResultModal();
+}
+
+function showLoadingModal() {
+  openModal(loadingModal);
+}
+
+function hideLoadingModal() {
+  closeModal(loadingModal);
+}
+
+function hideResultModal() {
+  closeModal(resultModal);
+}
+
+function openModal(modalElement) {
+  if (!modalElement.hidden) {
+    return;
+  }
+
+  modalElement.hidden = false;
+  modalElement.setAttribute("aria-hidden", "false");
+  activeModalCount += 1;
+  updateBodyScrollState();
+}
+
+function closeModal(modalElement) {
+  if (modalElement.hidden) {
+    return;
+  }
+
+  modalElement.hidden = true;
+  modalElement.setAttribute("aria-hidden", "true");
+  activeModalCount = Math.max(0, activeModalCount - 1);
+  updateBodyScrollState();
+}
+
+function updateBodyScrollState() {
+  document.body.classList.toggle("modal-open", activeModalCount > 0);
 }
